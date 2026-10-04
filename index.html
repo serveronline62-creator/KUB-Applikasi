@@ -44,7 +44,7 @@
         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition">
         Masuk
       </button>
-      <p class="text-xs text-gray-400 text-center">Demo Admin: admin@kub.id / admin123</p>
+      <p class="text-xs text-gray-400 text-center">Demo Admin KUB: admin@kub.id / admin123</p>
       <p class="text-sm text-center text-gray-600 pt-2 border-t">
         Belum punya akun?
         <a href="#" onclick="showRegister();return false;" class="text-blue-600 hover:underline font-medium">
@@ -110,7 +110,7 @@
         <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" id="userAvatar">A</div>
         <div class="flex-1 min-w-0">
           <p class="text-sm font-medium truncate" id="userName">Admin</p>
-          <p class="text-xs text-gray-500 truncate" id="userRole">Admin Paroki</p>
+          <p class="text-xs text-gray-500 truncate" id="userRole">Admin KUB</p>
         </div>
       </div>
       <button onclick="logout()" class="w-full mt-2 text-sm text-red-600 hover:bg-red-50 py-2 rounded-lg transition">
@@ -146,12 +146,12 @@
 /* ============================================================
    STORAGE LAYER (localStorage sebagai database)
    ============================================================ */
-const DB_KEY = 'kub_app_db_v1';
+const DB_KEY = 'kub_app_db_v2';
 const SESSION_KEY = 'kub_app_session';
 
 const defaultDB = {
   users: [
-    { id: 'u1', nama: 'Admin Paroki', email: 'admin@kub.id', password: 'admin123', role: 'admin_paroki', kub_id: null }
+    { id: 'u1', nama: 'Admin KUB', email: 'admin@kub.id', password: 'admin123', role: 'admin_kub', kub_id: null }
   ],
   kub: [
     { id: 'k1', kode: 'KUB-01', nama: 'KUB St. Yosef', wilayah: 'RW 01', alamat: 'Jl. Melati No. 1', ketua: 'Bpk. Anton', jumlah_kk: 0 }
@@ -234,26 +234,27 @@ function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;',
    ROUTER / MENU (dengan role akses)
    ============================================================ */
 const MENU = [
-  { id: 'dashboard', label: 'Dashboard',      icon: '📊', roles: ['admin_paroki','umat'] },
-  { id: 'kub',       label: 'Data KUB',       icon: '🏠', roles: ['admin_paroki'] },
-  { id: 'keluarga',  label: 'Keluarga',       icon: '👨‍👩‍👧', roles: ['admin_paroki'] },
-  { id: 'umat',      label: 'Umat',           icon: '👥', roles: ['admin_paroki'] },
-  { id: 'kegiatan',  label: 'Kegiatan',       icon: '📅', roles: ['admin_paroki','umat'] },
-  { id: 'presensi',  label: 'Presensi',       icon: '✅', roles: ['admin_paroki','umat'] },
-  { id: 'iuran',     label: 'Iuran',          icon: '💰', roles: ['admin_paroki','umat'] },
-  { id: 'kas',       label: 'Kas',            icon: '💵', roles: ['admin_paroki','umat'] },
-  { id: 'jadwal',    label: 'Jadwal Petugas', icon: '📋', roles: ['admin_paroki','umat'] },
-  { id: 'pengumuman',label: 'Pengumuman',     icon: '📢', roles: ['admin_paroki','umat'] },
-  { id: 'dokumen',   label: 'Dokumen',        icon: '📁', roles: ['admin_paroki','umat'] },
-  { id: 'laporan',   label: 'Laporan',        icon: '📈', roles: ['admin_paroki'] },
-  { id: 'pengaturan',label: 'Pengaturan',     icon: '⚙️', roles: ['admin_paroki','umat'] },
+  { id: 'dashboard', label: 'Dashboard',      icon: '📊', roles: ['admin_kub','umat'] },
+  { id: 'kub',       label: 'Data KUB',       icon: '🏠', roles: ['admin_kub'] },
+  { id: 'keluarga',  label: 'Keluarga',       icon: '👨‍👩‍👧', roles: ['admin_kub'] },
+  { id: 'umat',      label: 'Umat',           icon: '👥', roles: ['admin_kub'] },
+  { id: 'kegiatan',  label: 'Kegiatan',       icon: '📅', roles: ['admin_kub','umat'] },
+  { id: 'presensi',  label: 'Presensi',       icon: '✅', roles: ['admin_kub','umat'] },
+  { id: 'iuran',     label: 'Iuran',          icon: '💰', roles: ['admin_kub','umat'] },
+  { id: 'kas',       label: 'Kas',            icon: '💵', roles: ['admin_kub','umat'] },
+  { id: 'jadwal',    label: 'Jadwal Petugas', icon: '📋', roles: ['admin_kub','umat'] },
+  { id: 'pengumuman',label: 'Pengumuman',     icon: '📢', roles: ['admin_kub','umat'] },
+  { id: 'dokumen',   label: 'Dokumen',        icon: '📁', roles: ['admin_kub','umat'] },
+  { id: 'laporan',   label: 'Laporan',        icon: '📈', roles: ['admin_kub'] },
+  { id: 'pengaturan',label: 'Pengaturan',     icon: '⚙️', roles: ['admin_kub','umat'] },
 ];
 
 let currentPage = 'dashboard';
 let currentUser = null;
 
-function menuForRole(role) { return MENU.filter(m => m.roles.includes(role || 'admin_paroki')); }
+function menuForRole(role) { return MENU.filter(m => m.roles.includes(role || 'admin_kub')); }
 function isUmat() { return currentUser?.role === 'umat'; }
+function roleLabel(role) { return role === 'admin_kub' ? 'Admin KUB' : 'Umat'; }
 
 function renderMenu() {
   const items = menuForRole(currentUser?.role);
@@ -321,7 +322,7 @@ function showApp() {
   const u = DB.users.find(x => x.id === SESSION.user_id) || DB.users[0];
   currentUser = u;
   document.getElementById('userName').textContent = u.nama;
-  document.getElementById('userRole').textContent = u.role.replace('_',' ');
+  document.getElementById('userRole').textContent = roleLabel(u.role);
   document.getElementById('userAvatar').textContent = u.nama.charAt(0).toUpperCase();
   renderMenu();
   go('dashboard');
@@ -437,7 +438,7 @@ function pageDashboard(el) {
     return;
   }
 
-  /* ---------- Dashboard ADMIN ---------- */
+  /* ---------- Dashboard ADMIN KUB ---------- */
   const totalKeluarga = DB.keluarga.length;
   const totalUmat = DB.umat.length;
   const kegiatanAktif = DB.kegiatan.filter(k => k.status !== 'selesai').length;
@@ -522,7 +523,7 @@ function statCard(icon, label, value, color) {
 }
 
 /* ============================================================
-   PAGE: KUB (admin only)
+   PAGE: KUB (admin_kub only)
    ============================================================ */
 function pageKub(el) {
   el.innerHTML = `
@@ -594,7 +595,7 @@ function hapusKub(id) {
 }
 
 /* ============================================================
-   PAGE: KELUARGA (admin only)
+   PAGE: KELUARGA (admin_kub only)
    ============================================================ */
 function pageKeluarga(el) {
   el.innerHTML = `
@@ -685,7 +686,7 @@ function hapusKeluarga(id) {
 }
 
 /* ============================================================
-   PAGE: UMAT (admin only)
+   PAGE: UMAT (admin_kub only)
    ============================================================ */
 function pageUmat(el) {
   el.innerHTML = `
@@ -1442,7 +1443,7 @@ function hapusDokumen(id) {
 }
 
 /* ============================================================
-   PAGE: LAPORAN (admin only)
+   PAGE: LAPORAN (admin_kub only)
    ============================================================ */
 function pageLaporan(el) {
   const masuk = DB.kas.filter(t=>t.jenis==='masuk').reduce((a,t)=>a+Number(t.jumlah),0);
@@ -1573,7 +1574,7 @@ function pagePengaturan(el) {
         <div class="bg-white rounded-xl p-5 shadow-sm border">
           <h3 class="font-semibold mb-3">ℹ️ Tentang Akun</h3>
           <p class="text-sm text-gray-600">
-            Anda login sebagai <b>Umat</b>. Untuk mengubah data pribadi (tanggal lahir, pekerjaan, dll.) silakan hubungi admin KUB.
+            Anda login sebagai <b>Umat</b>. Untuk mengubah data pribadi (tanggal lahir, pekerjaan, dll.) silakan hubungi Admin KUB.
           </p>
         </div>
       </div>
@@ -1584,7 +1585,7 @@ function pagePengaturan(el) {
   el.innerHTML = `
     <div class="grid md:grid-cols-2 gap-4">
       <div class="bg-white rounded-xl p-5 shadow-sm border">
-        <h3 class="font-semibold mb-3">👤 Profil Pengguna</h3>
+        <h3 class="font-semibold mb-3">👤 Profil Admin KUB</h3>
         <form onsubmit="simpanProfil(event)" class="space-y-3">
           <div><label class="text-sm">Nama</label>
             <input name="nama" required value="${esc(DB.users[0].nama)}" class="w-full px-3 py-2 border rounded-lg"/>
@@ -1630,7 +1631,7 @@ function pagePengaturan(el) {
                   <td class="px-3 py-2 font-medium">${esc(u.nama)}</td>
                   <td class="px-3 py-2">${esc(u.email)}</td>
                   <td class="px-3 py-2"><span class="text-xs px-2 py-0.5 rounded-full ${
-                    u.role==='admin_paroki'?'bg-blue-100 text-blue-700':'bg-green-100 text-green-700'}">${esc(u.role)}</span></td>
+                    u.role==='admin_kub'?'bg-blue-100 text-blue-700':'bg-green-100 text-green-700'}">${esc(roleLabel(u.role))}</span></td>
                   <td class="px-3 py-2 text-right">
                     ${u.role==='umat'?`<button onclick="hapusUser('${u.id}')" class="text-red-600 hover:underline">Hapus</button>`:'-'}
                   </td>
@@ -1686,7 +1687,7 @@ function simpanProfilSaya(e) {
 
 function hapusUser(id) {
   const u = DB.users.find(x => x.id === id);
-  if (!u || u.role === 'admin_paroki') return;
+  if (!u || u.role === 'admin_kub') return;
   if (!confirm(`Hapus akun "${u.nama}"? Umat bisa mendaftar lagi dengan nama yang sama.`)) return;
   DB.users = DB.users.filter(x => x.id !== id);
   saveDB(); toast('Akun dihapus','info'); go('pengaturan');
