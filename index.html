@@ -1065,7 +1065,7 @@ function formIuran() {
         <div class="grid grid-cols-2 gap-3">
           <div><label class="text-sm">Jenis</label>
             <select name="jenis" class="w-full px-3 py-2 border rounded-lg">
-              ${['kas_kub','iuran_lingkungan','iuran_paroki','donasi'].map(j=>`<option value="${j}">${j}</option>`).join('')}
+              ${['kas_kub','iuran_lingkungan','iuran_kub','donasi'].map(j=>`<option value="${j}">${j}</option>`).join('')}
             </select>
           </div>
           <div><label class="text-sm">Periode (YYYY-MM)</label>
@@ -1343,7 +1343,7 @@ function formPengumuman() {
           <div><label class="text-sm">Target</label>
             <select name="target" class="w-full px-3 py-2 border rounded-lg">
               <option value="kub">KUB</option><option value="lingkungan">Lingkungan</option>
-              <option value="paroki">Paroki</option>
+              <option value="kub">kub</option>
             </select>
           </div>
           <div class="flex items-center gap-2 pt-6">
@@ -1646,7 +1646,7 @@ function pagePengaturan(el) {
         <p class="text-sm text-gray-600">
           <b>KUB App</b> — Sistem Informasi Kelompok Umat Basis v1.0<br/>
           Aplikasi single-file HTML untuk mengelola data KUB: keluarga, umat, kegiatan, presensi, iuran, kas, jadwal petugas, pengumuman, dan laporan.
-          Data disimpan secara lokal di browser Anda. Untuk penggunaan multi-user & multi-paroki, migrasikan ke backend (Supabase/MySQL + Next.js).
+          Data disimpan secara lokal di browser Anda. Untuk penggunaan multi-user & multi-kub, migrasikan ke backend (Supabase/MySQL + Next.js).
         </p>
       </div>
     </div>
